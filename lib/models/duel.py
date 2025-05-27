@@ -17,6 +17,9 @@ class Duel(Base):
     opponent_id = Column(Integer, ForeignKey('samurai.id'))
     winner_id = Column(Integer, ForeignKey('samurai.id'))
     
+    def __repr__(self):
+        return f"Duel {self.id}: between samurais {self.challenger_id} and {self.opponent_id}"
+    
     @property
     def challenger(self):
         from models.samurai import Samurai
