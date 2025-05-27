@@ -15,7 +15,7 @@ class Clan(Base):
     id = Column(Integer,  primary_key=True)
     name = Column(String())
     dojo = Column(String())
-    leader_id = Column(Integer(), ForeignKey('samurai.id'))
+    leader_id = Column(Integer(), ForeignKey('samurais.id'))
     
     @property
     def leader(self):

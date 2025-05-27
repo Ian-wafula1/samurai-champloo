@@ -13,9 +13,9 @@ class Duel(Base):
     time_held = Column(DateTime, server_default=func.now())
     location = Column(String())
     bushido_wagered = Column(Integer, default=0)
-    challenger_id = Column(Integer, ForeignKey('samurai.id'))
-    opponent_id = Column(Integer, ForeignKey('samurai.id'))
-    winner_id = Column(Integer, ForeignKey('samurai.id'))
+    challenger_id = Column(Integer, ForeignKey('samurais.id'))
+    opponent_id = Column(Integer, ForeignKey('samurais.id'))
+    winner_id = Column(Integer, ForeignKey('samurais.id'))
     
     def __repr__(self):
         return f"Duel {self.id}: between samurais {self.challenger_id} and {self.opponent_id}"
