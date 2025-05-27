@@ -1,9 +1,9 @@
-from models import Base
+from .base import Base
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from models import session
+from .base import Session
 
 class Clan(Base):
     __tablename__ = 'clans'
@@ -19,7 +19,8 @@ class Clan(Base):
     
     @property
     def leader(self):
-        from models.samurai import Samurai
+        from .samurai import Samurai
+        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.leader_id).first().name
     
     @property
@@ -28,7 +29,8 @@ class Clan(Base):
     
     @property
     def members(self):
-        from models.samurai import Samurai
+        session = Session()
+        from .samurai import Samurai
         return session.query(Samurai).filter(Samurai.clan_id == self.id).all()
     
     def add_member(self, samurai):

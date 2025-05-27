@@ -1,9 +1,9 @@
-from models import Base
+from .base import Base
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from models import session
+from .base import Session
 
 class Duel(Base):
     
@@ -22,17 +22,20 @@ class Duel(Base):
     
     @property
     def challenger(self):
-        from models.samurai import Samurai
+        from .samurai import Samurai
+        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.challenger_id).first()
     
     @property
     def opponent(self):
-        from models.samurai import Samurai
+        from .samurai import Samurai
+        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.opponent_id).first()
     
     @property
     def winner(self):
-        from models.samurai import Samurai
+        from .samurai import Samurai
+        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.winner_id).first()
     
     @property

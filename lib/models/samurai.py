@@ -1,9 +1,9 @@
-from models import Base
+from .base import Base
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from models import session
+from .base import Session
 
 class Samurai(Base):
     
