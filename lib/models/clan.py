@@ -28,19 +28,9 @@ class Clan(Base):
     def details(self):
         return f"Clan Name: {self.name}, Dojo: {self.dojo}, Leader: {self.leader}"
     
-    @property
-    def members(self):
-        from .samurai import Samurai
-        return session.query(Samurai).filter(Samurai.clan_id == self.id).all()
-    
-    def add_member(self, samurai):
-        pass
-    
-    def remove_member(self, samurai):
-        pass
-    
     def clan_bushido_total(self):
-        pass
+        from .samurai import Samurai
+        return sum([samurai.bushido for samurai in self.samurais])
     
     
     def __repr__(self):

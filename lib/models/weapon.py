@@ -16,17 +16,24 @@ class Weapon(Base):
     durability = Column(Integer, default=100)
     bushido_cost = Column(Integer)
     created_at = Column(DateTime, server_default=func.now())
-    samurai_id = Column(Integer, ForeignKey('samurais.id'))
+    samurai_id = Column(Integer, ForeignKey('samurais.id'), nullable=True)
     
     samurai = relationship('Samurai', back_populates='weapons')
     
-    @classmethod
-    def break_weapon(cls, weapon_id):
-        pass
+    def break_weapon(self):
+        session.query(Weapon).filter(Weapon.id == self.id).first().delete()
+        session.commit()
+        return f"Weapon {self.id} has broken."
     
     def degrade(self):
-        pass
+        self.durability -= 10
+        if self.durability <= 0:
+            return(self.break_weapon())
+        else:
+            session.add(self)
+            session.commit()
         
     def repair(self):
         self.durability = 100
+        return f"Weapon successfully repaired!"
         
