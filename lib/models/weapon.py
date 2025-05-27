@@ -3,7 +3,7 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTim
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from .base import Session
+from .base import session
 
 class Weapon(Base):
     
@@ -17,6 +17,8 @@ class Weapon(Base):
     bushido_cost = Column(Integer)
     created_at = Column(DateTime, server_default=func.now())
     samurai_id = Column(Integer, ForeignKey('samurais.id'))
+    
+    samurai = relationship('Samurai', back_populates='weapons')
     
     @classmethod
     def break_weapon(cls, weapon_id):

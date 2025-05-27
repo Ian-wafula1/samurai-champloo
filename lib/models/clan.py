@@ -3,7 +3,7 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTim
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from .base import Session
+from .base import session
 
 class Clan(Base):
     __tablename__ = 'clans'
@@ -17,10 +17,11 @@ class Clan(Base):
     dojo = Column(String())
     leader_id = Column(Integer(), ForeignKey('samurais.id'))
     
+    samurais = relationship('Samurai', back_populates='clan')
+    
     @property
     def leader(self):
         from .samurai import Samurai
-        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.leader_id).first().name
     
     @property
@@ -29,7 +30,6 @@ class Clan(Base):
     
     @property
     def members(self):
-        session = Session()
         from .samurai import Samurai
         return session.query(Samurai).filter(Samurai.clan_id == self.id).all()
     

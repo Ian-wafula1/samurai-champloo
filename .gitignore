@@ -26,3 +26,5 @@ env.bak/
 venv.bak/
 
 *.db
+
+.vscode

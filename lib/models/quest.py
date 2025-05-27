@@ -3,7 +3,8 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTim
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from .base import Session
+from .base import session
+from .samurai_quest import samurai_quest
 
 class Quest(Base):
     
@@ -19,6 +20,7 @@ class Quest(Base):
     created_at = Column(DateTime, server_default=func.now())
     completed_at = Column(DateTime, onupdate=func.now())
 
+    samurais = relationship('Samurai', back_populates='quests', secondary=samurai_quest)
     
     def __repr__(self):
         return f"Quest {self.id}: {self.name}"

@@ -12,3 +12,4 @@ Base = declarative_base(metadata=metadata)
 engine = create_engine('sqlite:///samurai.db')
 
 Session  = sessionmaker(bind=engine)
+session = Session()

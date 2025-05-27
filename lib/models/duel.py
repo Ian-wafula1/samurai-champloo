@@ -3,7 +3,7 @@ from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTim
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
-from .base import Session
+from .base import session
 
 class Duel(Base):
     
@@ -23,19 +23,16 @@ class Duel(Base):
     @property
     def challenger(self):
         from .samurai import Samurai
-        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.challenger_id).first()
     
     @property
     def opponent(self):
         from .samurai import Samurai
-        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.opponent_id).first()
     
     @property
     def winner(self):
         from .samurai import Samurai
-        session = Session()
         return session.query(Samurai).filter(Samurai.id == self.winner_id).first()
     
     @property
