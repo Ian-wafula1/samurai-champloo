@@ -25,12 +25,31 @@ class Quest(Base):
     def __repr__(self):
         return f"Quest {self.id}: {self.name}"
     
-    def participants(self):
-        pass
+    @classmethod
+    def assign_quest(cls, quest_id, samurai_id):
+        from .samurai import Samurai
+        if not (quest := session.query(Quest).filter(Quest.id == quest_id).first()):
+            print(f"Quest {quest_id} doesn't exist!")
+            return
+        if not (samurai := session.query(Samurai).filter(Samurai.id == quest_id).first()):
+            print(f"Samurai {samurai_id} doesn't exist!")
+            return
+        
+        if len(quest.samurais) >= 3:
+            print('A quest can only be undertaken by a maximum of 3 samurais')
+            return
+        
+        quest.samurais.append(samurai)
+        session.add([samurai, quest])
+        session.commit()
+        
     
-    def give_reward(self):
-        pass
-    
-    def check_status(self):
-        pass
+    def complete_quest(self):
+        reward = int(self.bushido_reward / self.samurais)
+        for samurai in self.samurais:
+            samurai.bushido += reward
+        session.add_all(self.samurais)
+        session.commit()
+            
+
     
