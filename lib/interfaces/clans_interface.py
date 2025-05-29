@@ -1,4 +1,5 @@
 from models import Clan, Samurai, session
+from sqlalchemy import desc
 
 class ClanInterface:
     
@@ -21,7 +22,7 @@ class ClanInterface:
                 exit()
             
             if inp == '1':
-                clans = session.query(Clan).order_by(Clan.clan_bushido_total).all()
+                clans = session.query(Clan).order_by(desc(Clan.clan_bushido_total)).all()
                 for i, clan in enumerate(clans):
                     print(f"{i+1}. {clan.details}")
                 break
@@ -30,7 +31,7 @@ class ClanInterface:
                 try:
                     name = input('Enter the clan\'s name: ')
                     dojo = input("Enter the clan dojo's name: ")
-                    leader = input("Enter the id of the clan's leader (Must be an existing samurai without a clan)")
+                    leader = input("Enter the id of the clan's leader (Must be an existing samurai without a clan): ")
                     samurai = session.query(Samurai).filter(Samurai.id == leader).first()
                     
                     if not samurai:
@@ -57,15 +58,15 @@ class ClanInterface:
                     
             elif inp == '3':
                 try:
-                    id = int(input('Please input the clan id'))
+                    id = int(input('Please input the clan id: '))
                     clan = session.query(Clan).filter(Clan.id == id).first()
                     if not clan:
                         print('Clan {id} not found')
-                    name = input('Please input the new clan name: (Input None to retain the name)')
+                    name = input('Please input the new clan name (Input None to retain the name): ')
                     clan.name = clan.name if name=='None' else name
-                    dojo = input('Please input the new dojo\'s name: (Input None to retain the dojo)')
+                    dojo = input('Please input the new dojo\'s name (Input None to retain the dojo): ')
                     clan.dojo = clan.dojo if dojo == 'None' else dojo
-                    leader = input('Please input the new leader\'s id: (Input None to retain the name)')
+                    leader = input('Please input the new leader\'s id (Input None to retain the name): ')
                     if leader != 'None':
                         samurai = session.query(Samurai).filter(Samurai.id == leader).first()
                         if not samurai:
@@ -79,6 +80,7 @@ class ClanInterface:
                     session.add(clan)
                     session.commit()
                     print(f'Clan {id} updated successfully!')
+                    break
                     
                 except:
                     print('Please input the correct data type.')
@@ -86,13 +88,13 @@ class ClanInterface:
                 
             elif inp == '4':
                 try:
-                    id = int(input('Enter the id of the clan you wan\'t to delete.'))
-                    clan = session.query(Clan).filter(Clan.id == id)
+                    id = int(input('Enter the id of the clan you wan\'t to delete: '))
+                    clan = session.query(Clan).filter(Clan.id == id).first()
                     if not clan:
                         print(f"Clan {id} doesn't exist!")
                         continue
                     print(clan.details)
-                    confirm = input('Are you sure you wan\'t to delete this clan? (y/n)').lower()
+                    confirm = input('Are you sure you wan\'t to delete this clan? (y/n): ').lower()
                     if confirm not in ('y','n'):
                         raise Exception()
                     if confirm == 'n':
@@ -101,6 +103,7 @@ class ClanInterface:
                     clan.delete()
                     session.commit()
                     print(f'Clan {id} deleted successfully!')
+                    break
                     
                 except:
                     print('Please input the correct data type')

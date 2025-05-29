@@ -12,7 +12,7 @@ class Samurai(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    skill_level = Column(Integer, default=0)
+    skill_level = Column(Integer, default=10)
     bushido = Column(Integer, default=0)
     created_at = Column(DateTime, server_default=func.now())
     clan_id = Column(Integer, ForeignKey('clans.id'), nullable=True)
@@ -26,6 +26,10 @@ class Samurai(Base):
     
     def increase_skill(self, result):
         self.skill_level += 7 if result == 'win' else 3
+        
+    @property
+    def details(self):
+        return f"{self.name} | Skill: {self.skill_level} | Bushido: {self.bushido} | Clan: {self.clan}"
         
     @property
     def rank(self):

@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import typer
-from models import Clan, Duel, Quest, Samurai, Weapon, session
 from utils import seed_db, clear_db
 
 app = typer.Typer()
@@ -37,12 +36,12 @@ def quests():
     pass
 
 @app.command()
-def seed():
+def seed_database():
     seed_db()
     print('Seeding complete')
     
 @app.command()
-def clear():
+def clear_database():
     confirm = input('Are you sure you want to clear the database. This will remove all stored data. This action is irreversible!! (y/n)').lower()
     if confirm not in ('y', 'n'):
         print('Wrong input!')
