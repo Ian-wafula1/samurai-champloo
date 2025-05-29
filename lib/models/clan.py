@@ -24,7 +24,7 @@ class Clan(Base):
     
     @property
     def details(self):
-        return f"Clan Name: {self.name}, Dojo: {self.dojo}, Leader: {self.leader}"
+        return f"{self.name} | {self.clan_bushido_total} bushido | {len(self.samurais)} samurais | Clan Leader: {self.leader}"
     
     def clan_bushido_total(self):
         from .samurai import Samurai

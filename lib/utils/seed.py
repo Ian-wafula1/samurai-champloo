@@ -1,14 +1,11 @@
 import utils.data as data
 from models import Samurai, Clan, Weapon, Duel, Quest, session
 import random
+from .clear import clear_db
 
-def seed():
+def seed_db():
     
-    session.query(Samurai).delete()
-    session.query(Clan).delete()
-    session.query(Weapon).delete()
-    session.query(Duel).delete()
-    session.query(Quest).delete()
+    clear_db()
     
     samurais = [Samurai(
         name = data.samurai_names[i],
@@ -50,5 +47,5 @@ def seed():
     
 if __name__ == '__main__':
     print('Seeding database')
-    seed()
+    seed_db()
     print('Seeding complete')
