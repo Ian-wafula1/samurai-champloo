@@ -25,6 +25,10 @@ class Quest(Base):
     def __repr__(self):
         return f"Quest {self.id}: {self.name}"
     
+    @property
+    def details(self):
+        return f"{self.name} | Description: {self.description} | Difficulty : {self.difficulty_rating} | Status: {self.status} | Reward: {self.bushido_reward}"
+    
     @classmethod
     def assign_quest(cls, quest_id, samurai_id):
         from .samurai import Samurai
