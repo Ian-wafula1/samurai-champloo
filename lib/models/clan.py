@@ -1,6 +1,6 @@
 from .base import Base
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, func, DateTime, UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.associationproxy import association_proxy
 from datetime import datetime
 from .base import session
@@ -8,14 +8,12 @@ from .base import session
 class Clan(Base):
     __tablename__ = 'clans'
     __table_args__ = (
-        UniqueConstraint('dojo', name='unique_dojo_name'),
-        UniqueConstraint('leader_id', name='unique_leader_id')
-    )
+        UniqueConstraint('dojo', name='unique_dojo_name'),)
     
     id = Column(Integer,  primary_key=True)
     name = Column(String())
     dojo = Column(String())
-    leader_id = Column(Integer(), ForeignKey('samurais.id'))
+    leader_id = Column(String())  
     
     samurais = relationship('Samurai', back_populates='clan')
     

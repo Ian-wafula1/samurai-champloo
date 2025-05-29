@@ -39,6 +39,8 @@ class Quest(Base):
             print('A quest can only be undertaken by a maximum of 3 samurais')
             return
         
+        quest.status = 'active'
+        
         quest.samurais.append(samurai)
         session.add([samurai, quest])
         session.commit()
@@ -48,6 +50,7 @@ class Quest(Base):
         reward = int(self.bushido_reward / self.samurais)
         for samurai in self.samurais:
             samurai.bushido += reward
+        self.status = 'completed'
         session.add_all(self.samurais)
         session.commit()
             

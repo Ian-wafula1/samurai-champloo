@@ -13,7 +13,7 @@ class Samurai(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
     skill_level = Column(Integer, default=0)
-    bushido = Column(Integer)
+    bushido = Column(Integer, default=0)
     created_at = Column(DateTime, server_default=func.now())
     clan_id = Column(Integer, ForeignKey('clans.id'), nullable=True)
     

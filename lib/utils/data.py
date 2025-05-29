@@ -79,3 +79,26 @@ weapons = [
     ("Mistpiercer", "Yari"),
     ("Dusk Fang", "Wakizashi")
 ]
+
+quest_types = [
+    "Assassination",
+    "Reconnaissance",
+    "Escort",
+    "Duel Challenge",
+    "Monster Hunt",
+    "Spiritual Journey",
+    "Artifact Recovery",
+    "Sabotage",
+    "Diplomatic Mission",
+    "Defense",
+    "Infiltration",
+    "Training",
+    "Honor Duel",
+    "Espionage",
+    "Treasure Hunt",
+    "Village Aid",
+    "Bandit Hunt",
+    "Curse Removal",
+    "Betrayal Investigation",
+    "Message Delivery"
+]

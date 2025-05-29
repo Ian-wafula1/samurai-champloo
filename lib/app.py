@@ -1,2 +1,19 @@
+#!/usr/bin/env python3
 import typer
 from models import Clan, Duel, Quest, Samurai, Weapon, session
+
+app = typer.Typer()
+
+@app.command()
+def hello(name: str):
+    print(f"Hello {name}")
+    
+@app.command()
+def goodbye(name: str, formal: bool = False):
+    if formal:
+        print(f"Goodbye Mr. {name}. Have a good day.")
+    else:
+        print(f"Bye {name}!")
+        
+if __name__ == '__main__':
+    app()

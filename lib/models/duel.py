@@ -80,8 +80,8 @@ class Duel(Base):
             raise ValueError("One of the samurais lacks enough bushido to duel.")
         
         # Logic for deciding winner
-        challenger_score = challenger_weapon.damage + challenger.skill_level + random.randint(0,10)
-        opponent_score = opponent_weapon.damage + opponent.skill_level + random.randint(0,10)
+        challenger_score = int(challenger_weapon.damage * 0.6) + challenger.skill_level + random.randint(0,10)
+        opponent_score = int(opponent_weapon.damage * 0.6) + opponent.skill_level + random.randint(0,10)
         
         winner = challenger if challenger_score > opponent_score else opponent
         loser = opponent if winner == challenger else challenger
