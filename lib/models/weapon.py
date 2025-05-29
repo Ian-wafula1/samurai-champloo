@@ -36,4 +36,8 @@ class Weapon(Base):
     def repair(self):
         self.durability = 100
         return f"Weapon successfully repaired!"
+    
+    @property
+    def details(self):
+        return f"{self.name} | Type: {self.type} | Damage: {self.damage} | Cost: {self.bushido_cost}"
         
