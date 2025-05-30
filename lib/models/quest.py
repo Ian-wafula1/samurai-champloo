@@ -33,30 +33,32 @@ class Quest(Base):
     def assign_quest(cls, quest_id, samurai_id):
         from .samurai import Samurai
         if not (quest := session.query(Quest).filter(Quest.id == quest_id).first()):
-            print(f"Quest {quest_id} doesn't exist!")
-            return
+            return f"Quest {quest_id} doesn't exist!"
         if not (samurai := session.query(Samurai).filter(Samurai.id == quest_id).first()):
-            print(f"Samurai {samurai_id} doesn't exist!")
-            return
-        
+            return f"Samurai {samurai_id} doesn't exist!"
         if len(quest.samurais) >= 3:
-            print('A quest can only be undertaken by a maximum of 3 samurais')
-            return
-        
+            return 'A quest can only be undertaken by a maximum of 3 samurais'
+        if samurai in quest.samurais:
+            return f"Samurai {samurai_id} is already assigned to this quest"
+        if quest.status == 'completed':
+            return f"Quest {quest_id} is already completed"
         quest.status = 'active'
         
         quest.samurais.append(samurai)
         session.add([samurai, quest])
         session.commit()
-        
+        return f"Quest {quest_id} assigned to Samurai {samurai_id}"
     
     def complete_quest(self):
+        if self.status == 'completed':
+            return f"Quest {self.id} is already completed"
         reward = int(self.bushido_reward / self.samurais)
         for samurai in self.samurais:
             samurai.bushido += reward
         self.status = 'completed'
         session.add_all(self.samurais)
+        session.add(self)
         session.commit()
-            
-
+        
+        return f"Quest {self.id} completed. Reward: {reward} Bushido points"
     

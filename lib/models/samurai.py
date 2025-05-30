@@ -95,10 +95,6 @@ class Samurai(Base):
     def losses(self):
         return [duel for duel in self.duels if duel.winner_id != self.id]
     
-    def challenge(self, opponent_id, wager, location):
-        from .duel import Duel
-        Duel.handle_duel(self.id, opponent_id, wager, location)
-    
     def repair_weapon(self, weapon_id):
         from .weapon import Weapon
         weapon = session.query(Weapon).filter(Weapon.id == weapon_id).first()
@@ -114,6 +110,19 @@ class Samurai(Base):
                 self.bushido -= cost
                 session.commit()
                 return f"Weapon {weapon_id} repaired!! You have {self.bushido} left."
+            
+    def leave_clan(self):
+        self.clan_id = None
+        return "You have left the clan!"
+        
+    def join_clan(self, clan_id):
+        from .clan import Clan
+        clan = session.query(Clan).filter(Clan.id == clan_id).first()
+        if not clan:
+            return f"Clan {clan_id} does not exist"
+        else:
+            self.clan_id = clan_id
+            return f"You have joined the clan {clan.name}"
     
     
     

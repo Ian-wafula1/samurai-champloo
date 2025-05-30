@@ -40,13 +40,10 @@ class Duel(Base):
     def participants(self):
         return [self.challenger, self.opponent]
     
-    @staticmethod
-    def handle_duel(chal_id, opp_id, wager, location):
+    def handle_duel(self):
         from .samurai import Samurai
-        if chal_id == opp_id:
-            raise Exception("One can not duel against himself (in Master oogway voice)")
-        challenger = session.query(Samurai).filter(Samurai.id == chal_id).first()
-        opponent = session.query(Samurai).filter(Samurai.id == opp_id).first()
+        challenger = session.query(Samurai).filter(Samurai.id == self.challenger_id).first()
+        opponent = session.query(Samurai).filter(Samurai.id == self.opponent_id).first()
         print(f"{challenger.name} has challenged {opponent.name} to a duel!")
         
         if not challenger.weapons:
@@ -76,7 +73,7 @@ class Duel(Base):
             else:
                 print('Please pick a weapon owned by the opponent')
         
-        if challenger.bushido < wager or opponent.bushido < wager:
+        if challenger.bushido < self.bushido_wagered or opponent.bushido < self.bushido_wagered:
             raise ValueError("One of the samurais lacks enough bushido to duel.")
         
         # Logic for deciding winner
@@ -89,24 +86,15 @@ class Duel(Base):
         challenger_weapon.degrade()
         opponent_weapon.degrade()
         
-        winner.bushido += wager
+        winner.bushido += self.bushido_wagered
         winner.increase_skill('win')
-        loser.bushido -= wager
+        loser.bushido -= self.bushido_wagered
         loser.increase_skill('loss')
         
-        duel = Duel(
-            time_held = func.now(),
-            location = location,
-            bushido_wagered = wager,
-            challenger_id = chal_id,
-            opponent_id = opp_id,
-            winner_id = winner.id
-        )
-        
-        session.add_all([duel, challenger_weapon, opponent_weapon, winner, loser])
+        self.winner_id = winner.id
+        print(f"{winner.name} has won the duel!")
+        session.add_all([ challenger_weapon, opponent_weapon, winner, loser])
         session.commit()
-        
-        return duel
         
         
         
