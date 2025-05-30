@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import typer
 from utils import seed_db, clear_db
+from interfaces import *
 
 app = typer.Typer()
 
@@ -17,23 +18,19 @@ app = typer.Typer()
         
 @app.command()
 def clans():
-    pass
+    ClanInterface.run()
 
 @app.command()
 def samurais():
-    pass
-
-@app.command()
-def duels():
-    pass
+    SamuraiInterface.run()
 
 @app.command()
 def weapons():
-    pass
+    WeaponInterface.run()
 
 @app.command()
 def quests():
-    pass
+    QuestInterface.run()
 
 @app.command()
 def seed_database():

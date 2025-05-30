@@ -5,17 +5,19 @@ class SamuraiSubInterface:
     
     @staticmethod
     def menu():
-        print("0. Exit program \
-            1. View details \
-            2. Start duel \
-            3. View owned weapons \
-            4. Buy Weapon \
-            5. Sell Weapon \
-            6. Join clan \
-            7. Leave current clan \
-            8. Repair weapon \
-            9. Participate in quest \
-            10. Mark quest as completed", end='\n\n')
+        print("""
+            0. Exit program
+            1. View details
+            2. Start duel
+            3. View owned weapons
+            4. Buy Weapon
+            5. Sell Weapon
+            6. Join clan
+            7. Leave current clan
+            8. Repair weapon
+            9. Participate in quest
+            10. Complete quest
+            11. View duel history""", end='\n\n')
         
     @staticmethod
     def run(id):
@@ -33,6 +35,7 @@ class SamuraiSubInterface:
                 
             elif inp == '1':
                 print(samurai.details)
+                break
             
             elif inp == '2':
                 try:
@@ -56,39 +59,48 @@ class SamuraiSubInterface:
                     duel.handle_duel()
                     session.add(duel)
                     session.commit()
+                    break
                 except:
                     print("Invalid input!")
                     
             elif inp == '3':
                 weapons = session.query(Weapon).filter(Weapon.samurai_id == id).all()
+                if not weapons:
+                    print("You don't own any weapons!")
+                    continue
                 for i, weapon in enumerate(weapons):
                     print(f"{i+1}. {weapon.details}")
+                    
+                break
                 
             elif inp == '4':
                 try:
-                    weapons = session.query(Weapon).filter_by(Weapon.samurai == None).all()
+                    weapons = session.query(Weapon).filter(Weapon.samurai == None).all()
                     for i, weapon in enumerate(weapons):
-                        print(f"{i+1}. {weapon.details}")
+                        print(f"{i+1}. {weapon.details} | Weapon ID: {weapon.id}")
                     if not weapons:
                         print("No weapons available for purchase!")
                         continue
                     weapon_id = int(input("Enter the weapon's ID: "))
                     print(samurai.purchase_weapon(weapon_id))
                     session.commit()
-                    
+                    break
                 except:
                     print('Please input the correct data type')
             
             elif inp == '5':
                 weapons = session.query(Weapon).filter(Weapon.samurai_id == id).all()
-                for i, weapon in enumerate(weapons):
-                    print(f"{i+1}. {weapon.details}")
                 if not weapons:
                     print("You don't own any weapons!")
                     continue
+                print("Weapons you own:")
+                for i, weapon in enumerate(weapons):
+                    print(f"{i+1}. {weapon.details} | Weapon ID: {weapon.id}")
+                
                 weapon_id = int(input("Enter the weapon's ID: "))
                 print(samurai.sell_weapon(weapon_id))
                 session.commit()
+                break
                 
             elif inp == '6':
                 try:
@@ -96,6 +108,7 @@ class SamuraiSubInterface:
                     print(samurai.join_clan(clan_id))
                     session.add(samurai)
                     session.commit()
+                    break
                 except:
                     print('Please input the correct data type')
                 
@@ -103,32 +116,37 @@ class SamuraiSubInterface:
                 print(samurai.leave_clan())
                 session.add(samurai)
                 session.commit()
+                break
 
             elif inp == '8':
                 try:
                     weapons = session.query(Weapon).filter(Weapon.samurai_id == id).all()
-                    for i, weapon in enumerate(weapons):
-                        print(f"{i+1}. {weapon.details}")
                     if not weapons:
                         print("You don't own any weapons!")
                         continue
+                    print("Weapons you own:")
+                    for i, weapon in enumerate(weapons):
+                        print(f"{i+1}. {weapon.details}")
                     weapon_id = int(input("Enter the weapon's ID: "))
                     print(samurai.repair_weapon(weapon_id))
                     session.commit()
+                    break
                 except:
                     print('Please input the correct data type')
                 
             elif inp == '9':
                 try:
-                    quests = session.query(Quest).order_by(desc(Quest.difficulty)).all()
+                    quests = session.query(Quest).order_by(desc(Quest.bushido_reward)).all()
                     for i, quest in enumerate(quests):
-                        print(f"{i+1}. {quest.details}")
+                        print(f"{i+1}. {quest.details}", end='\n\n')
                     if not quests:
                         print("No quests available!")
                         continue
                     quest_id = int(input("Enter the quest's ID: "))
                     print(Quest.assign_quest(quest_id, samurai.id))
                     session.commit()
+                    break
+                
                 except:
                     print('Please input the correct data type')
                     
@@ -143,8 +161,15 @@ class SamuraiSubInterface:
                     quest_id = int(input("Enter the quest's ID: "))
                     print(Quest.complete_quest(quest_id))
                     session.commit()
+                    break
+                
                 except:
                     print('Please input the correct data type')
+                    
+            elif inp == '11':
+                for duel in samurai.duels:
+                    print(duel.details, end='\n\n')
+                break
             
             else:
                 print("Invalid input. Please try again.")

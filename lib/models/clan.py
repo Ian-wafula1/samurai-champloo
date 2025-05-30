@@ -26,6 +26,7 @@ class Clan(Base):
     def details(self):
         return f"{self.name} | {self.clan_bushido_total} bushido | {len(self.samurais)} samurais | Clan Leader: {self.leader}"
     
+    @property
     def clan_bushido_total(self):
         from .samurai import Samurai
         return sum([samurai.bushido for samurai in self.samurais])

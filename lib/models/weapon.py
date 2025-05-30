@@ -39,5 +39,5 @@ class Weapon(Base):
     
     @property
     def details(self):
-        return f"{self.name} | Type: {self.type} | Damage: {self.damage} | Cost: {self.bushido_cost}"
+        return f"{self.name} | Type: {self.type} | Damage: {self.damage} | Durability: {self.durability} | Cost: {self.bushido_cost} | ID: {self.id}"
         

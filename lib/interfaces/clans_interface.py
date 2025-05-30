@@ -9,7 +9,8 @@ class ClanInterface:
             1. View clan rankings \
             2. Create new clan \
             3. Update existing clan \
-            4. Delete clan ", end='\n\n')
+            4. Delete clan \
+            5. View clan details", end='\n\n')
         
     @staticmethod
     def run():
@@ -22,9 +23,10 @@ class ClanInterface:
                 exit()
             
             if inp == '1':
-                clans = session.query(Clan).order_by(desc(Clan.clan_bushido_total)).all()
+                clans = session.query(Clan).all()
+                clans.sort(key=lambda x: x.clan_bushido_total, reverse=True)
                 for i, clan in enumerate(clans):
-                    print(f"{i+1}. {clan.details}")
+                    print(f"{i+1}. {clan.details}", end='\n\n')
                 break
             
             elif inp == '2':
@@ -88,7 +90,7 @@ class ClanInterface:
                 
             elif inp == '4':
                 try:
-                    id = int(input('Enter the id of the clan you wan\'t to delete: '))
+                    id = int(input('Enter the id of the clan you want to delete: '))
                     clan = session.query(Clan).filter(Clan.id == id).first()
                     if not clan:
                         print(f"Clan {id} doesn't exist!")
@@ -96,15 +98,30 @@ class ClanInterface:
                     print(clan.details)
                     confirm = input('Are you sure you wan\'t to delete this clan? (y/n): ').lower()
                     if confirm not in ('y','n'):
-                        raise Exception()
+                        print('Please input one of the provided options')
                     if confirm == 'n':
                         print('Deletion cancelled!')
                         continue
-                    clan.delete()
+                    session.delete(clan)
                     session.commit()
                     print(f'Clan {id} deleted successfully!')
                     break
                     
+                except:
+                    print('Please input the correct data type')
+                    continue
+            elif inp == '5':
+                try:
+                    id = int(input('Enter the id of the clan you want to view: '))
+                    clan = session.query(Clan).filter(Clan.id == id).first()
+                    if not clan:
+                        print(f"Clan {id} doesn't exist!")
+                        continue
+                    print(clan.details)
+                    print('Clan members:', end='\n\n')
+                    for i, member in enumerate(clan.samurais):
+                        print(f"{i+1}. {member.details}")
+                    break
                 except:
                     print('Please input the correct data type')
                     continue

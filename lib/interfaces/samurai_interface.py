@@ -6,12 +6,13 @@ class SamuraiInterface:
     
     @staticmethod
     def menu():
-        print("0. Exit program \
-            1. View samurai rankings \
-            2. Create new samurai \
-            3. Update existing samurai \
-            4. Delete samurai \
-            5. Perform actions on specific samurai", end='\n\n')
+        print("""
+            0. Exit program
+            1. View samurai rankings
+            2. Create new samurai
+            3. Update existing samurai
+            4. Delete samurai
+            5. Perform actions on specific samurai""", end='\n\n')
         
     @staticmethod
     def run():
@@ -87,11 +88,12 @@ class SamuraiInterface:
                     print(samurai.details)
                     confirm = input('Are you sure you wan\'t to delete this samurai? (y/n)').lower()
                     if confirm not in ('y','n'):
-                        raise Exception()
+                        print("Please input one of the available choices")
+                        continue
                     if confirm == 'n':
                         print('Deletion cancelled!')
                         continue
-                    samurai.delete()
+                    session.delete(samurai)
                     session.commit()
                     print(f'Samurai {id} deleted successfully!')
                     break

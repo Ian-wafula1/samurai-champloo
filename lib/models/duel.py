@@ -40,6 +40,10 @@ class Duel(Base):
     def participants(self):
         return [self.challenger, self.opponent]
     
+    @property
+    def details(self):
+        return f"Duel {self.id} | Time Held: {self.time_held} | Location: {self.location} | Bushido Wagered: {self.bushido_wagered} | Winner: {self.winner.name}"
+    
     def handle_duel(self):
         from .samurai import Samurai
         challenger = session.query(Samurai).filter(Samurai.id == self.challenger_id).first()
@@ -47,17 +51,18 @@ class Duel(Base):
         print(f"{challenger.name} has challenged {opponent.name} to a duel!")
         
         if not challenger.weapons:
-            raise Exception(f"The challenger, {challenger.name} lacks a weapon to participate in the duel")
+            print(f"The challenger, {challenger.name} lacks a weapon to participate in the duel")
+            exit()
         
         if not opponent.weapons:
-            raise Exception(f"The opponent, {opponent.name} lacks a weapon to participate in the duel")
-        
+            print(f"The opponent, {opponent.name} lacks a weapon to participate in the duel")
+            exit()
         
         while True:
             print('Challenger!!! Choose your weapon')
             for weapon in challenger.weapons:
-                print(f"Weapon {weapon.id}: {weapon.name} | Damage: {weapon.damage} | Durability: {weapon.durability}")
-            challenger_weapon = next((weapon for weapon in challenger.weapons if weapon.id == input('Weapon id: ')), None)
+                print(f"ID {weapon.id}: {weapon.name} | Damage: {weapon.damage} | Durability: {weapon.durability}")
+            challenger_weapon = next((weapon for weapon in challenger.weapons if weapon.id == int(input('Weapon id: '))), None)
             if challenger_weapon:
                 break
             else:
@@ -66,8 +71,8 @@ class Duel(Base):
         while True:
             print('Opponent!!! Choose your weapon')
             for weapon in opponent.weapons:
-                print(f"Weapon {weapon.id}: {weapon.name} | Damage: {weapon.damage} | Durability: {weapon.durability}")
-            opponent_weapon = next((weapon for weapon in opponent.weapons if weapon.id == input('Weapon id: ')), None)
+                print(f"ID {weapon.id}: {weapon.name} | Damage: {weapon.damage} | Durability: {weapon.durability}")
+            opponent_weapon = next((weapon for weapon in opponent.weapons if weapon.id == int(input('Weapon id: '))), None)
             if opponent_weapon:
                 break
             else:
@@ -93,9 +98,10 @@ class Duel(Base):
         
         self.winner_id = winner.id
         print(f"{winner.name} has won the duel!")
+        print(f"{winner.name} has gained {self.bushido_wagered} bushido points and now has {winner.bushido} bushido points")
+        print(f"{loser.name} has lost {self.bushido_wagered} bushido points and now has {loser.bushido} bushido points")
+        
+        session.add(self)
         session.add_all([ challenger_weapon, opponent_weapon, winner, loser])
         session.commit()
-        
-        
-        
         

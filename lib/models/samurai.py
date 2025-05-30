@@ -29,7 +29,7 @@ class Samurai(Base):
         
     @property
     def details(self):
-        return f"{self.name} | Skill: {self.skill_level} | Bushido: {self.bushido} | Clan: {self.clan}"
+        return f"{self.name} | Skill: {self.skill_level} | Bushido: {self.bushido} | Rank: {self.rank} | Clan: {self.clan.name if self.clan else 'None'} | ID: {self.id}"
         
     @property
     def rank(self):
@@ -45,12 +45,6 @@ class Samurai(Base):
             return "Sensei"
         else:
             return "Shogun"
-    
-    def join_clan(self, clan_id):
-        self.clan_id = clan_id
-        
-    def leave_clan(self):
-        self.clan_id = None
     
     def purchase_weapon(self, weapon_id):
         from .weapon import Weapon
@@ -78,8 +72,9 @@ class Samurai(Base):
             self.bushido += weapon.bushido_cost
             weapon.samurai_id = None
             session.commit()
-            return f"Weapon {weapon_id} sold successfully!"
+            return f"Weapon {weapon_id} successfully sold for {weapon.bushido_cost} bushido! You have {self.bushido}."
             
+    @property
     def duels(self):
         from .duel import Duel
         duels = []
@@ -104,16 +99,18 @@ class Samurai(Base):
             cost = int(0.4 * weapon.bushido_cost)
             if self.bushido < cost:
                 return "You don't have enough bushido to repair the weapon. \
-                        Engage in duels or participate in quests to earn bushido."
+                        Participate in quests to earn bushido."
             else:
                 weapon.repair()
                 self.bushido -= cost
                 session.commit()
-                return f"Weapon {weapon_id} repaired!! You have {self.bushido} left."
+                return f"Weapon {weapon_id} repaired!! You have {self.bushido} bushido left."
             
     def leave_clan(self):
-        self.clan_id = None
-        return "You have left the clan!"
+        if clan := self.clan:
+            self.clan_id = None
+            return f"You have left the clan {clan.name}"
+        return "You are not in a clan"
         
     def join_clan(self, clan_id):
         from .clan import Clan
@@ -123,7 +120,4 @@ class Samurai(Base):
         else:
             self.clan_id = clan_id
             return f"You have joined the clan {clan.name}"
-    
-    
-    
     

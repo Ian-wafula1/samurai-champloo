@@ -1,4 +1,5 @@
-from models import Clan
+from interfaces import *
+from utils import seed_db
 
 if __name__ == "__main__":
-    print(Clan)
+    import ipdb; ipdb.set_trace()
