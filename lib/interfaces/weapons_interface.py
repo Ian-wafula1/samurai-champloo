@@ -5,13 +5,14 @@ class WeaponInterface:
     
     @staticmethod
     def menu():
-        print("0. Exit the program \
-            1. View all weapons \
-            2. View weapons available for purchase \
-            3. Add weapon \
-            4. Update existing weapon \
-            5. Delete weapon \
-            6. View weapon details", end='\n\n')
+        print("""
+            0. Exit the program
+            1. View all weapons
+            2. View weapons available for purchase
+            3. Add weapon
+            4. Update existing weapon
+            5. Delete weapon
+            6. View weapon details""", end='\n\n')
         
     @staticmethod
     def run():
@@ -32,7 +33,9 @@ class WeaponInterface:
                 weapons = session.query(Weapon).filter(Weapon.samurai == None).order_by(desc(Weapon.bushido_cost)).all()
                 for i, weapon in enumerate(weapons):
                     print(f"{i+1}. {weapon.details}")
+                    
                 break
+            
             elif inp == '3':
                 try:
                     name = input("Enter the weapon's name: ")
@@ -100,12 +103,14 @@ class WeaponInterface:
                     if confirm == 'n':
                         print('Deletion cancelled!')
                         continue
+                    
                     if weapon.samurai:
                         owner = weapon.samurai
                         owner.bushido += int(0.8 * weapon.bushido_cost)
                         print(f"The weapon's owner, samurai {owner.name} has been compensated with 80% of the weapon's cost.")
                         session.add(owner)
                         session.commit()
+                        
                     session.delete(weapon)
                     session.commit()
                     print(f'Weapon {id} deleted successfully!')
@@ -122,8 +127,10 @@ class WeaponInterface:
                     if not weapon:
                         print(f"Weapon {id} doesn't exist!")
                         continue
+                    
                     print(weapon.details)
                     break
+                
                 except:
                     print('Please input the correct data type')
                     continue

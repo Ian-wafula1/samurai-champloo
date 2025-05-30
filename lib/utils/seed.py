@@ -12,8 +12,10 @@ def seed_db():
         skill_level = random.randint(20, 75),
         bushido= random.randint(25, 60),
     ) for i in range(36)]
+    
     session.add_all(samurais)
     session.commit()
+    
     
     weapons = [Weapon(
         name = weapon[0],
@@ -22,8 +24,10 @@ def seed_db():
         durability = 100,
         bushido_cost = random.randint(20,40)
     ) for weapon in data.weapons]
+    
     session.add_all(weapons)
     session.commit()
+    
     
     clans = []
     for i in range(len(data.clan_names)):
@@ -34,9 +38,11 @@ def seed_db():
         )
         samurais[i].clan = clan
         clans.append(clan)
+        
     session.add_all(clans)
     session.add_all(samurais)
     session.commit()
+    
     
     quests = [Quest(
         name = data.quest_names[i],
@@ -49,6 +55,7 @@ def seed_db():
     
     session.add_all(quests)
     session.commit()
+    
     
 if __name__ == '__main__':
     print('Seeding database')

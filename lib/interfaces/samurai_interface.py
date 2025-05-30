@@ -28,6 +28,7 @@ class SamuraiInterface:
                     a. Bushido \
                     b. Skill level')
                 option = input('Select an option (a/b): ').lower()
+                
                 if option not in ('a', 'b'):
                     print('Please input the correct choice')
                 if option == 'a':
@@ -61,8 +62,10 @@ class SamuraiInterface:
                 try:
                     id = int(input('Please input the samurai id: '))
                     samurai = session.query(Samurai).filter(Samurai.id == id).first()
+                    
                     if not samurai:
                         print('Samurai {id} not found')
+                        
                     name = input('Please input the samurai\'s new name: (Input None to retain the name): ')
                     samurai.name = samurai.name if name == 'None' else name
                     bushido = input('Please input the new bushido amount (Input None to retain the name):')
@@ -82,9 +85,11 @@ class SamuraiInterface:
                 try:
                     id = int(input('Enter the id of the samurai you wan\'t to delete: '))
                     samurai = session.query(Samurai).filter(Samurai.id == id).first()
+                    
                     if not samurai:
                         print(f"Clan {id} doesn't exist!")
                         continue
+                    
                     print(samurai.details)
                     confirm = input('Are you sure you wan\'t to delete this samurai? (y/n)').lower()
                     if confirm not in ('y','n'):
@@ -93,6 +98,7 @@ class SamuraiInterface:
                     if confirm == 'n':
                         print('Deletion cancelled!')
                         continue
+                    
                     session.delete(samurai)
                     session.commit()
                     print(f'Samurai {id} deleted successfully!')
@@ -108,6 +114,7 @@ class SamuraiInterface:
                     if not samurai:
                         print(f"Samurai {id} doesn't exist.")
                         continue
+                    
                     SamuraiSubInterface.run(id)
                     break
                 except:

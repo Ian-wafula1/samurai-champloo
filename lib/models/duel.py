@@ -14,6 +14,7 @@ class Duel(Base):
     time_held = Column(DateTime, server_default=func.now())
     location = Column(String())
     bushido_wagered = Column(Integer, default=0)
+    
     challenger_id = Column(Integer, ForeignKey('samurais.id'))
     opponent_id = Column(Integer, ForeignKey('samurais.id'))
     winner_id = Column(Integer, ForeignKey('samurais.id'))
@@ -45,9 +46,11 @@ class Duel(Base):
         return f"Duel {self.id} | Time Held: {self.time_held} | Location: {self.location} | Bushido Wagered: {self.bushido_wagered} | Winner: {self.winner.name}"
     
     def handle_duel(self):
+        
         from .samurai import Samurai
         challenger = session.query(Samurai).filter(Samurai.id == self.challenger_id).first()
         opponent = session.query(Samurai).filter(Samurai.id == self.opponent_id).first()
+        
         print(f"{challenger.name} has challenged {opponent.name} to a duel!")
         
         if not challenger.weapons:
@@ -63,6 +66,7 @@ class Duel(Base):
             for weapon in challenger.weapons:
                 print(f"ID {weapon.id}: {weapon.name} | Damage: {weapon.damage} | Durability: {weapon.durability}")
             challenger_weapon = next((weapon for weapon in challenger.weapons if weapon.id == int(input('Weapon id: '))), None)
+            
             if challenger_weapon:
                 break
             else:
@@ -73,13 +77,15 @@ class Duel(Base):
             for weapon in opponent.weapons:
                 print(f"ID {weapon.id}: {weapon.name} | Damage: {weapon.damage} | Durability: {weapon.durability}")
             opponent_weapon = next((weapon for weapon in opponent.weapons if weapon.id == int(input('Weapon id: '))), None)
+            
             if opponent_weapon:
                 break
             else:
                 print('Please pick a weapon owned by the opponent')
         
         if challenger.bushido < self.bushido_wagered or opponent.bushido < self.bushido_wagered:
-            raise ValueError("One of the samurais lacks enough bushido to duel.")
+            print("One of the samurais lacks enough bushido to duel.")
+            exit()
         
         # Logic for deciding winner
         challenger_score = int(challenger_weapon.damage * 0.6) + challenger.skill_level + random.randint(0,10)
@@ -97,6 +103,7 @@ class Duel(Base):
         loser.increase_skill('loss')
         
         self.winner_id = winner.id
+        
         print(f"{winner.name} has won the duel!")
         print(f"{winner.name} has gained {self.bushido_wagered} bushido points and now has {winner.bushido} bushido points")
         print(f"{loser.name} has lost {self.bushido_wagered} bushido points and now has {loser.bushido} bushido points")

@@ -43,12 +43,15 @@ class SamuraiSubInterface:
                     if opponent_id == id:
                         print("You can't duel with yourself!")
                         continue
+                    
                     opponent = session.query(Samurai).filter(Samurai.id == opponent_id).first()
                     if not opponent:
                         print("Opponent not found!")
                         continue
+                    
                     wager = int(input("Enter the wager: "))
                     location = input("Enter the location: ")
+                    
                     duel = Duel(
                         time_held = func.now(),
                         challenger_id=samurai.id, 
@@ -56,6 +59,7 @@ class SamuraiSubInterface:
                         bushido_wagered = wager,
                         location = location
                     )
+                    
                     duel.handle_duel()
                     session.add(duel)
                     session.commit()
@@ -68,6 +72,7 @@ class SamuraiSubInterface:
                 if not weapons:
                     print("You don't own any weapons!")
                     continue
+                
                 for i, weapon in enumerate(weapons):
                     print(f"{i+1}. {weapon.details}")
                     
@@ -76,23 +81,30 @@ class SamuraiSubInterface:
             elif inp == '4':
                 try:
                     weapons = session.query(Weapon).filter(Weapon.samurai == None).all()
-                    for i, weapon in enumerate(weapons):
-                        print(f"{i+1}. {weapon.details} | Weapon ID: {weapon.id}")
+                    
                     if not weapons:
                         print("No weapons available for purchase!")
                         continue
+                    
+                    for i, weapon in enumerate(weapons):
+                        print(f"{i+1}. {weapon.details} | Weapon ID: {weapon.id}")
+                    
                     weapon_id = int(input("Enter the weapon's ID: "))
                     print(samurai.purchase_weapon(weapon_id))
+                    
                     session.commit()
                     break
+                
                 except:
                     print('Please input the correct data type')
+                    
             
             elif inp == '5':
                 weapons = session.query(Weapon).filter(Weapon.samurai_id == id).all()
                 if not weapons:
                     print("You don't own any weapons!")
                     continue
+                
                 print("Weapons you own:")
                 for i, weapon in enumerate(weapons):
                     print(f"{i+1}. {weapon.details} | Weapon ID: {weapon.id}")
@@ -106,6 +118,7 @@ class SamuraiSubInterface:
                 try:
                     clan_id = int(input("Enter the clan's ID: "))
                     print(samurai.join_clan(clan_id))
+                    
                     session.add(samurai)
                     session.commit()
                     break
@@ -124,9 +137,11 @@ class SamuraiSubInterface:
                     if not weapons:
                         print("You don't own any weapons!")
                         continue
+                    
                     print("Weapons you own:")
                     for i, weapon in enumerate(weapons):
                         print(f"{i+1}. {weapon.details}")
+                        
                     weapon_id = int(input("Enter the weapon's ID: "))
                     print(samurai.repair_weapon(weapon_id))
                     session.commit()
@@ -137,11 +152,13 @@ class SamuraiSubInterface:
             elif inp == '9':
                 try:
                     quests = session.query(Quest).order_by(desc(Quest.bushido_reward)).all()
-                    for i, quest in enumerate(quests):
-                        print(f"{i+1}. {quest.details}", end='\n\n')
                     if not quests:
                         print("No quests available!")
                         continue
+                    
+                    for i, quest in enumerate(quests):
+                        print(f"{i+1}. {quest.details}", end='\n\n')
+                        
                     quest_id = int(input("Enter the quest's ID: "))
                     print(Quest.assign_quest(quest_id, samurai.id))
                     session.commit()
@@ -156,8 +173,10 @@ class SamuraiSubInterface:
                     if not quests:
                         print("You are not part of any quests!")
                         continue
+                    
                     for i, quest in enumerate(quests):
                         print(f"{i+1}. {quest.details}")
+                        
                     quest_id = int(input("Enter the quest's ID: "))
                     print(Quest.complete_quest(quest_id))
                     session.commit()

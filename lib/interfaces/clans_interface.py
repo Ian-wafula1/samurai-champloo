@@ -5,12 +5,13 @@ class ClanInterface:
     
     @staticmethod
     def menu():
-        print("0. Exit program \
-            1. View clan rankings \
-            2. Create new clan \
-            3. Update existing clan \
-            4. Delete clan \
-            5. View clan details", end='\n\n')
+        print("""
+            0. Exit program
+            1. View clan rankings
+            2. Create new clan
+            3. Update existing clan
+            4. Delete clan
+            5. View clan details""", end='\n\n')
         
     @staticmethod
     def run():
@@ -54,6 +55,7 @@ class ClanInterface:
                     print(f"Clan {name} added successfully!")
                     
                     break
+                
                 except:
                     print('Kindly input the correct data types.')
                     continue
@@ -64,19 +66,24 @@ class ClanInterface:
                     clan = session.query(Clan).filter(Clan.id == id).first()
                     if not clan:
                         print('Clan {id} not found')
+                        
                     name = input('Please input the new clan name (Input None to retain the name): ')
                     clan.name = clan.name if name=='None' else name
                     dojo = input('Please input the new dojo\'s name (Input None to retain the dojo): ')
                     clan.dojo = clan.dojo if dojo == 'None' else dojo
                     leader = input('Please input the new leader\'s id (Input None to retain the name): ')
+                    
                     if leader != 'None':
                         samurai = session.query(Samurai).filter(Samurai.id == leader).first()
+                        
                         if not samurai:
                             print(f'Samurai {leader} does not exist. Please try again')
                             continue
+                        
                         if samurai not in clan.samurais:
                             print(f"Samurai {leader} is not a member of the clan. The samurai must join the clan in order to become the clan leader.")
                             continue
+                        
                         clan.leader_id = leader
                         
                     session.add(clan)
@@ -95,13 +102,16 @@ class ClanInterface:
                     if not clan:
                         print(f"Clan {id} doesn't exist!")
                         continue
+                    
                     print(clan.details)
                     confirm = input('Are you sure you wan\'t to delete this clan? (y/n): ').lower()
+                    
                     if confirm not in ('y','n'):
                         print('Please input one of the provided options')
                     if confirm == 'n':
                         print('Deletion cancelled!')
                         continue
+                    
                     session.delete(clan)
                     session.commit()
                     print(f'Clan {id} deleted successfully!')
@@ -114,14 +124,18 @@ class ClanInterface:
                 try:
                     id = int(input('Enter the id of the clan you want to view: '))
                     clan = session.query(Clan).filter(Clan.id == id).first()
+                    
                     if not clan:
                         print(f"Clan {id} doesn't exist!")
                         continue
+                    
                     print(clan.details)
                     print('Clan members:', end='\n\n')
                     for i, member in enumerate(clan.samurais):
                         print(f"{i+1}. {member.details}")
+                        
                     break
+                
                 except:
                     print('Please input the correct data type')
                     continue

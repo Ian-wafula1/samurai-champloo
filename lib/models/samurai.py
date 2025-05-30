@@ -15,6 +15,7 @@ class Samurai(Base):
     skill_level = Column(Integer, default=10)
     bushido = Column(Integer, default=0)
     created_at = Column(DateTime, server_default=func.now())
+    
     clan_id = Column(Integer, ForeignKey('clans.id'), nullable=True)
     
     quests = relationship('Quest', back_populates='samurais', secondary=samurai_quest)
@@ -48,9 +49,11 @@ class Samurai(Base):
     
     def purchase_weapon(self, weapon_id):
         from .weapon import Weapon
+        
         if weapon := session.query(Weapon).filter(Weapon.id == weapon_id).first():
             if id := weapon.samurai_id:
                 return f"Weapon is already owned by samurai {id}"
+            
             else:
                 if self.bushido < weapon.bushido_cost:
                     return "You don't have enough bushido to purchase the weapon. \
@@ -60,14 +63,18 @@ class Samurai(Base):
                     weapon.samurai_id = self.id
                     session.commit()
                     return f"Weapon {weapon_id} purchased successfully. You have {self.bushido} bushido left."
+                
         else:
             return f"Weapon {weapon_id} doesn't exist "
     
     def sell_weapon(self, weapon_id):
         from .weapon import Weapon
+        
         weapon = session.query(Weapon).filter(Weapon.id == weapon_id).first()
+        
         if weapon not in self.weapons:
             return f"Weapon {weapon_id} is not in your possession"
+        
         else:
             self.bushido += weapon.bushido_cost
             weapon.samurai_id = None
@@ -78,8 +85,10 @@ class Samurai(Base):
     def duels(self):
         from .duel import Duel
         duels = []
+        
         duels.extend(session.query(Duel).filter(Duel.opponent_id == self.id).all())
         duels.extend(session.query(Duel).filter(Duel.challenger_id == self.id).all())
+        
         return duels
     
     @property
@@ -92,11 +101,13 @@ class Samurai(Base):
     
     def repair_weapon(self, weapon_id):
         from .weapon import Weapon
+        
         weapon = session.query(Weapon).filter(Weapon.id == weapon_id).first()
         if weapon not in self.weapons:
             return f"Weapon {weapon_id} is not in your possession"
         else:
             cost = int(0.4 * weapon.bushido_cost)
+            
             if self.bushido < cost:
                 return "You don't have enough bushido to repair the weapon. \
                         Participate in quests to earn bushido."
@@ -110,11 +121,13 @@ class Samurai(Base):
         if clan := self.clan:
             self.clan_id = None
             return f"You have left the clan {clan.name}"
+        
         return "You are not in a clan"
         
     def join_clan(self, clan_id):
         from .clan import Clan
         clan = session.query(Clan).filter(Clan.id == clan_id).first()
+        
         if not clan:
             return f"Clan {clan_id} does not exist"
         else:

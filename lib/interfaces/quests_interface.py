@@ -27,6 +27,7 @@ class QuestInterface:
             if inp == '1':
                 quests = session.query(Quest).all()
                 difficulties = ['Easy', 'Medium', 'Hard', 'Legendary']
+                
                 quests.sort(key=lambda x: difficulties.index(x.difficulty_rating), reverse=True)
                 for i, quest in enumerate(quests):
                     print(f"{i+1}. {quest.details}", end='\n\n')
@@ -38,9 +39,11 @@ class QuestInterface:
                     description = input("Enter quest description: ")
                     type = input("Enter quest type: ")
                     difficulty = input("Enter quest difficulty (Easy/Medium/Hard/Legendary): ")
+                    
                     if difficulty not in ('Easy', 'Medium', 'Hard', 'Legendary'):
                         print("Kindly input the correct difficulty")
                         continue
+                    
                     bushido_reward = int(input("Enter bushido reward: "))
 
                     quest = Quest(
@@ -138,12 +141,15 @@ class QuestInterface:
                 try:
                     id = int(input("Enter the ID of the quest: "))
                     quest = session.query(Quest).filter(Quest.id == id).first()
+                    
                     if not quest:
                         print(f"Quest {id} doesn't exist!")
                         continue
+                    
                     if not quest.samurais:
                         print(f"Quest {id} has no participants")
                         continue
+                    
                     print(f"Participants of quest {id}:")
                     for samurai in quest.samurais:
                         print(samurai.details)

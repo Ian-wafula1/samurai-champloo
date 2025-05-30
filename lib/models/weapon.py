@@ -16,6 +16,7 @@ class Weapon(Base):
     durability = Column(Integer, default=100)
     bushido_cost = Column(Integer)
     created_at = Column(DateTime, server_default=func.now())
+    
     samurai_id = Column(Integer, ForeignKey('samurais.id'), nullable=True)
     
     samurai = relationship('Samurai', back_populates='weapons')

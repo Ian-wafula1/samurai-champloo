@@ -4,17 +4,6 @@ from utils import seed_db, clear_db
 from interfaces import *
 
 app = typer.Typer()
-
-# @app.command()
-# def hello(name: str):
-#     print(f"Hello {name}")
-    
-# @app.command()
-# def goodbye(name: str, formal: bool = False):
-#     if formal:
-#         print(f"Goodbye Mr. {name}. Have a good day.")
-#     else:
-#         print(f"Bye {name}!")
         
 @app.command()
 def clans():
