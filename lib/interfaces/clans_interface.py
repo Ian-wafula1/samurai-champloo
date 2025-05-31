@@ -108,6 +108,7 @@ class ClanInterface:
                     
                     if confirm not in ('y','n'):
                         print('Please input one of the provided options')
+                        continue
                     if confirm == 'n':
                         print('Deletion cancelled!')
                         continue

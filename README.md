@@ -1,18 +1,10 @@
 # Samurai Champloo
 
-## 📝 Table of Contents
-
-- [About](#about)
-- [Getting Started](#getting_started)
-- [Deployment](#deployment)
-- [Usage](#usage)
-- [Built Using](#built_using)
-- [TODO](../TODO.md)
-- [Contributing](../CONTRIBUTING.md)
-- [Authors](#authors)
-- [Acknowledgments](#acknowledgement)
-
 Welcome to Samurai CLI, a samurai-themed command-line application built in Python using SQLAlchemy. This immersive project lets users simulate a feudal world where legendary samurais join clans, embark on quests, wield powerful weapons, and engage in epic duels to earn bushido (honour).
+
+## Demo Video
+
+https://www.loom.com/share/2dded2ef51524c0ea6f8b5d3ac425715?sid=2d73468e-3125-4955-948e-a33a7bb07c51
 
 ## 🌸 Features
 

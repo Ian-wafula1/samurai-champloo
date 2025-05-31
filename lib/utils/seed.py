@@ -25,6 +25,9 @@ def seed_db():
         bushido_cost = random.randint(20,40)
     ) for weapon in data.weapons]
     
+    for i, weapon in enumerate(random.sample(weapons, 5)):
+        weapon.samurai = samurais[i]
+        
     session.add_all(weapons)
     session.commit()
     

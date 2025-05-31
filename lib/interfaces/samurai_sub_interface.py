@@ -60,10 +60,12 @@ class SamuraiSubInterface:
                         location = location
                     )
                     
-                    duel.handle_duel()
-                    session.add(duel)
-                    session.commit()
+                    res = duel.handle_duel()
+                    if res:
+                        session.add(duel)
+                        session.commit()
                     break
+                
                 except:
                     print("Invalid input!")
                     

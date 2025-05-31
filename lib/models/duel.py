@@ -55,11 +55,11 @@ class Duel(Base):
         
         if not challenger.weapons:
             print(f"The challenger, {challenger.name} lacks a weapon to participate in the duel")
-            exit()
+            return
         
         if not opponent.weapons:
             print(f"The opponent, {opponent.name} lacks a weapon to participate in the duel")
-            exit()
+            return
         
         while True:
             print('Challenger!!! Choose your weapon')
@@ -85,7 +85,7 @@ class Duel(Base):
         
         if challenger.bushido < self.bushido_wagered or opponent.bushido < self.bushido_wagered:
             print("One of the samurais lacks enough bushido to duel.")
-            exit()
+            return
         
         # Logic for deciding winner
         challenger_score = int(challenger_weapon.damage * 0.6) + challenger.skill_level + random.randint(0,10)
@@ -111,4 +111,6 @@ class Duel(Base):
         session.add(self)
         session.add_all([ challenger_weapon, opponent_weapon, winner, loser])
         session.commit()
+        
+        return self
         
