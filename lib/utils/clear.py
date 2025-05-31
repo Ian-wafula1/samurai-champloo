@@ -1,4 +1,5 @@
 from models import Samurai, Clan, Weapon, Duel, Quest, session
+from sqlalchemy import text
 
 def clear_db():
     session.query(Samurai).delete()
@@ -6,8 +7,7 @@ def clear_db():
     session.query(Weapon).delete()
     session.query(Duel).delete()
     
-    for quest in session.query(Quest).all():
-        quest.samurais = []
+    session.execute(text("DELETE FROM samurai_quest"))
         
     session.query(Quest).delete()
     

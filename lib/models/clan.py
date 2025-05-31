@@ -24,7 +24,7 @@ class Clan(Base):
     
     @property
     def details(self):
-        return f"{self.name} | {self.clan_bushido_total} bushido | {len(self.samurais)} samurais | Clan Leader: {self.leader}"
+        return f"{self.name} | {self.clan_bushido_total} bushido | {len(self.samurais)} samurais | Dojo: {self.dojo} | Clan Leader: {self.leader}"
     
     @property
     def clan_bushido_total(self):
